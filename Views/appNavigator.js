@@ -15,7 +15,7 @@ import ProfileScreen from "./Tailor/TailorProfile";
 import CatalogScreen from "./Tailor/CatalogScreen";
 
 const Stack = createStackNavigator();
-const Drawer = createDrawerNavigator();
+
 
 // Authentication Stack
 const AuthStack = () => (
@@ -50,10 +50,16 @@ const AuthStack = () => (
       component={ForgotPasswordScreen}
       options={{ title: "Forgot Password" }}
     />
+     <Stack.Screen
+      name="Catalog"
+      component={CatalogScreen}
+      options={{ title: "Catalog" }}
+    />
+
   </Stack.Navigator>
 );
 
-// Tailor Drawer Navigator
+/* Tailor Drawer Navigator
 const TailorDrawer = () => (
   <Drawer.Navigator
     screenOptions={{
@@ -83,5 +89,6 @@ const AppNavigator = () => {
     </NavigationContainer>
   );
 };
+*/
 
 export default AppNavigator;
