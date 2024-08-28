@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, FlatList } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import tw from 'twrnc';
 
 const OrderListScreen = () => {
@@ -12,65 +13,50 @@ const OrderListScreen = () => {
   const [searchText, setSearchText] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('all');
 
-  const filteredOrders = orders.filter((order) => {
-    if (selectedStatus === 'all') return true;
-    return order.status.toLowerCase() === selectedStatus;
-  }).filter((order) =>
-    order.item.toLowerCase().includes(searchText.toLowerCase())
-  );
+  const toggleOrderStatus = (id) => {
+    setOrders(prevOrders =>
+      prevOrders.map(order =>
+        order.id === id
+          ? { ...order, status: order.status === 'Completed' ? 'Upcoming' : 'Completed' }
+          : order
+      )
+    );
+  };
+
+  const filteredOrders = orders
+    .filter((order) => (selectedStatus === 'all' ? true : order.status.toLowerCase() === selectedStatus))
+    .filter((order) => order.item.toLowerCase().includes(searchText.toLowerCase()));
 
   return (
     <View style={tw`flex-1 bg-gray-100`}>
       <View style={tw`bg-white p-4 shadow-md`}>
-        <TextInput
-          style={tw`bg-gray-200 rounded-lg px-3 py-2 text-gray-800 text-base`}
-          placeholder="Search orders"
-          value={searchText}
-          onChangeText={setSearchText}
-        />
-        <View style={tw`flex-row mt-2`}>
-          <TouchableOpacity
-            style={[
-              tw`bg-gray-200 rounded-lg px-3 py-2 mr-2`,
-              selectedStatus === 'all' && tw`bg-blue-500`
-            ]}
-            onPress={() => setSelectedStatus('all')}
-          >
-            <Text style={[
-              tw`text-base`,
-              selectedStatus === 'all' && tw`text-white`
-            ]}>
-              All
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              tw`bg-gray-200 rounded-lg px-3 py-2 mr-2`,
-              selectedStatus === 'completed' && tw`bg-blue-500`
-            ]}
-            onPress={() => setSelectedStatus('completed')}
-          >
-            <Text style={[
-              tw`text-base`,
-              selectedStatus === 'completed' && tw`text-white`
-            ]}>
-              Completed
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              tw`bg-gray-200 rounded-lg px-3 py-2`,
-              selectedStatus === 'upcoming' && tw`bg-blue-500`
-            ]}
-            onPress={() => setSelectedStatus('upcoming')}
-          >
-            <Text style={[
-              tw`text-base`,
-              selectedStatus === 'upcoming' && tw`text-white`
-            ]}>
-              Upcoming
-            </Text>
-          </TouchableOpacity>
+        <View style={tw`flex-row items-center`}>
+          <Feather name="search" size={20} color="#888" style={tw`mr-2`} />
+          <TextInput
+            style={tw`bg-gray-200 rounded-lg px-3 py-2 text-gray-800 text-base flex-1`}
+            placeholder="Search orders"
+            value={searchText}
+            onChangeText={setSearchText}
+          />
+        </View>
+        <View style={tw`flex-row mt-3 justify-evenly`}>
+          {['all', 'completed', 'upcoming'].map((status) => (
+            <TouchableOpacity
+              key={status}
+              style={[
+                tw`px-3 py-2 rounded-full`,
+                selectedStatus === status ? tw`bg-blue-500` : tw`bg-gray-200`
+              ]}
+              onPress={() => setSelectedStatus(status)}
+            >
+              <Text style={[
+                tw`text-base`,
+                selectedStatus === status ? tw`text-white` : tw`text-gray-800`
+              ]}>
+                {status.charAt(0).toUpperCase() + status.slice(1)}
+              </Text>
+            </TouchableOpacity>
+          ))}
         </View>
       </View>
 
@@ -79,15 +65,26 @@ const OrderListScreen = () => {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View style={[
-            tw`bg-white rounded-lg p-4 my-2 shadow-md`,
+            tw`bg-white rounded-lg p-4 my-2 mx-3 shadow-md flex-row items-center`,
             item.status.toLowerCase() === 'completed' ? tw`border-l-4 border-green-500` : 
             item.status.toLowerCase() === 'upcoming' ? tw`border-l-4 border-blue-500` : null
           ]}>
-            <Text style={tw`text-base text-gray-800`}>{item.item}</Text>
-            <Text style={tw`text-base text-gray-800`}>{item.status}</Text>
-            <Text style={tw`text-sm text-gray-600 mt-1`}>{item.date}</Text>
+            <TouchableOpacity onPress={() => toggleOrderStatus(item.id)}>
+              <Feather 
+                name={item.status === 'Completed' ? 'check-square' : 'square'} 
+                size={24} 
+                color={item.status === 'Completed' ? 'green' : 'gray'}
+                style={tw`mr-3`}
+              />
+            </TouchableOpacity>
+            <View style={tw`flex-1`}>
+              <Text style={tw`text-lg font-semibold text-gray-800`}>{item.item}</Text>
+              <Text style={tw`text-sm text-gray-600 mt-1`}>{item.date}</Text>
+            </View>
+            <Text style={tw`text-sm text-gray-500`}>{item.status}</Text>
           </View>
         )}
+        ItemSeparatorComponent={() => <View style={tw`h-2`} />}
       />
     </View>
   );

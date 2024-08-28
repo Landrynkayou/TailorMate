@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, Alert, Image } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+import * as ImagePicker from 'expo-image-picker';
 import tw from 'twrnc';
 
 const ProfileScreen = ({ navigation }) => {
@@ -11,6 +12,7 @@ const ProfileScreen = ({ navigation }) => {
     phone: '+1 234 567 8900',
     address: '123 Tailor St, Fashion City, FC 12345',
     specialization: 'Custom Suits',
+    photo: null,
   });
 
   const handleEdit = () => {
@@ -24,10 +26,26 @@ const ProfileScreen = ({ navigation }) => {
   };
 
   const handleChange = (key, value) => {
-    setProfile(prevProfile => ({
+    setProfile((prevProfile) => ({
       ...prevProfile,
-      [key]: value
+      [key]: value,
     }));
+  };
+
+  const handlePickImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setProfile((prevProfile) => ({
+        ...prevProfile,
+        photo: result.uri,
+      }));
+    }
   };
 
   return (
@@ -43,7 +61,15 @@ const ProfileScreen = ({ navigation }) => {
       </View>
 
       <View style={tw`items-center mt-5 mb-5`}>
-        <Feather name="user" size={80} color="#3498db" />
+        <TouchableOpacity onPress={handlePickImage}>
+          {profile.photo ? (
+            <Image source={{ uri: profile.photo }} style={tw`w-24 h-24 rounded-full`} />
+          ) : (
+            <View style={tw`w-24 h-24 bg-gray-300 rounded-full justify-center items-center`}>
+              <Feather name="camera" size={40} color="#3498db" />
+            </View>
+          )}
+        </TouchableOpacity>
       </View>
 
       <View style={tw`bg-white rounded-lg p-4 mx-4`}>

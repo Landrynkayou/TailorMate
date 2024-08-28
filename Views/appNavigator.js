@@ -55,7 +55,11 @@ const AuthStack = () => (
       component={CatalogScreen}
       options={{ title: "Catalog" }}
     />
-
+         <Stack.Screen
+      name="OrderScreen"
+      component={OrderListScreen}
+      options={{ title: "Orders" }}
+    />
   </Stack.Navigator>
 );
 

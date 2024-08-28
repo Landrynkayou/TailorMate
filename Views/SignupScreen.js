@@ -7,6 +7,8 @@ import {
   Platform,
   Alert,
   TouchableOpacity,
+  Button,
+ Text
 } from 'react-native';
 import AppText from './Apptext';
 import AppInputText from './AppInputText';
@@ -17,7 +19,7 @@ const SignupScreen = ({ route, navigation }) => {
   const { role } = route.params || {};
 
   const [formData, setFormData] = useState({
-    role: role || 'Customer',
+    role: role || 'Customer', // Default to 'Customer' now
     fullName: '',
     email: '',
     phone: '',
@@ -80,13 +82,49 @@ const SignupScreen = ({ route, navigation }) => {
     // Navigate to the appropriate screen after signup
     if (role === 'Tailor') {
       navigation.navigate('TailorLandingPage');
+    } else if (role === 'Customer') { // Updated to 'Customer'
+      navigation.navigate('ClientLandingScreen');
     } else {
-      navigation.navigate('Welcome');
+      console.log('Unknown role');
+      // Handle unknown roles if needed
+    }
+  };
+
+  // Mock data for testing
+  const mockTailor = {
+    role: 'Tailor',
+    fullName: 'John Doe',
+    email: 'john.doe@example.com',
+    phone: '1234567890',
+    password: 'password123',
+    confirmPassword: 'password123',
+    businessName: 'John\'s Tailoring',
+    address: '123 Tailor Street'
+  };
+
+  const mockCustomer = { // Updated from 'Client' to 'Customer'
+    role: 'Customer',
+    fullName: 'Jane Smith',
+    email: 'jane.smith@example.com',
+    phone: '0987654321',
+    password: 'password456',
+    confirmPassword: 'password456',
+    businessName: '', // Not required for customers
+    address: '' // Not required for customers
+  };
+
+  // Function to fill form with mock data based on role
+  const fillFormWithMockData = () => {
+    if (formData.role === 'Tailor') {
+      setFormData(mockTailor);
+    } else if (formData.role === 'Customer') { // Updated to 'Customer'
+      setFormData(mockCustomer);
     }
   };
 
   return (
     <SafeAreaView style={tw`flex-1 bg-gray-100`}>
+       
       <KeyboardAvoidingView 
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={tw`flex-1 p-5`}
@@ -196,6 +234,9 @@ const SignupScreen = ({ route, navigation }) => {
               titleStyle={tw`text-center text-blue-600 text-lg`}
             />
           </TouchableOpacity>
+
+          {/* Button to fill the form with mock data */}
+          <Button title="Fill with Mock Data" onPress={fillFormWithMockData} />
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>

@@ -28,13 +28,16 @@ const OTPVerificationScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={tw`flex-1 justify-center items-center p-5`}>
-      <Text style={tw`text-2xl font-bold mb-5`}>OTP Verification</Text>
-      <View style={tw`flex-row justify-between w-4/5 mb-5`}>
+    <View style={tw`flex-1 justify-center items-center bg-gray-100 p-6`}>
+      <Text style={tw`text-3xl font-bold text-blue-600 mb-8`}>OTP Verification</Text>
+      <Text style={tw`text-center text-gray-700 mb-4 px-4`}>
+        Please enter the 4-digit code sent to your email.
+      </Text>
+      <View style={tw`flex-row justify-between w-3/4 mb-6`}>
         {otp.map((digit, index) => (
           <TextInput
             key={index}
-            style={tw`w-14 h-14 border border-gray-300 rounded-md text-center text-xl`}
+            style={tw`w-16 h-16 border border-gray-300 rounded-lg text-center text-2xl bg-white shadow-md`}
             value={digit}
             onChangeText={(value) => handleOtpChange(value, index)}
             keyboardType="numeric"
@@ -43,14 +46,14 @@ const OTPVerificationScreen = ({ navigation }) => {
           />
         ))}
       </View>
-      <Text style={tw`mb-5`}>
+      <Text style={tw`text-gray-600 mb-6`}>
         Time left: {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')}
       </Text>
       <TouchableOpacity
-        style={tw`bg-blue-500 py-3 px-8 rounded-md`}
+        style={tw`bg-blue-600 py-4 px-12 rounded-full shadow-lg`}
         onPress={handleSubmit}
       >
-        <Text style={tw`text-white font-bold text-base`}>Submit</Text>
+        <Text style={tw`text-white font-bold text-lg`}>Submit</Text>
       </TouchableOpacity>
     </View>
   );

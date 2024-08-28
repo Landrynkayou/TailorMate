@@ -1,8 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, SafeAreaView, Dimensions } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons'; // Using MaterialCommunityIcons for more diverse icons
-import  tw  from 'twrnc';
-
+import tw from 'twrnc';
 
 const { width } = Dimensions.get('window');
 
@@ -48,7 +47,6 @@ const RolePickerScreen = ({ navigation }) => {
           />
         </View>
       </View>
-     
     </SafeAreaView>
   );
 };

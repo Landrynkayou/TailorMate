@@ -1,7 +1,8 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, TouchableOpacity, FlatList, Image, SafeAreaView, TextInput, Animated, Easing } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import AddClientScreen from './ClientDetailsScreen';
+import AddClientScreen from '../AddCllientScreen';
+import { Alert } from 'react-native';
 import tw from 'twrnc';
 
 const TailorLandingScreen = ({ navigation }) => {
@@ -20,7 +21,22 @@ const TailorLandingScreen = ({ navigation }) => {
   const filteredClients = clients.filter((client) =>
     client.name.toLowerCase().includes(searchText.toLowerCase())
   );
-
+  const handleDisconnect = () => {
+    Alert.alert(
+      "Disconnect",
+      "Are you sure you want to disconnect?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel"
+        },
+        {
+          text: "Yes",
+          onPress: () => navigation.navigate('Login'), // Redirect to login screen
+        }
+      ]
+    );
+  };
   const handleSearchToggle = () => {
     setSearchVisible(!searchVisible);
     if (!searchVisible) {
@@ -46,16 +62,7 @@ const TailorLandingScreen = ({ navigation }) => {
       handleMenuToggle(); // Close the menu when the overlay is pressed
     }
   };
-
-  const handleAddClient = (newClient) => {
-    setClients([...clients, newClient]);
-    setShowAddClientForm(false); // Close form after adding client
-  };
-
-  const handleClientPress = (client) => {
-    navigation.navigate('ClientDetails', { client });
-  };
-
+  
   return (
     <SafeAreaView style={tw`flex-1 bg-gray-100`}>
       <View style={tw`flex-row items-center bg-blue-600 py-4 px-5`}>
@@ -81,16 +88,14 @@ const TailorLandingScreen = ({ navigation }) => {
         )}
       </View>
 
-      {showAddClientForm ? (
-        <AddClientScreen addClient={handleAddClient} />
-      ) : (
+      {!showAddClientForm  && (
         <FlatList
           data={filteredClients}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <TouchableOpacity 
               style={tw`flex-row items-center bg-white rounded-lg mx-5 my-2 p-3 shadow-lg`}
-            
+             
             >
               <View style={tw`mr-4`}>
                 <Image source={{ uri: item.avatar }} style={tw`w-12 h-12 rounded-full`} />
@@ -107,19 +112,18 @@ const TailorLandingScreen = ({ navigation }) => {
           )}
         />
       )}
-    
 
       {!showAddClientForm && (
         <View style={tw`flex-1 justify-end items-center pb-5`}>
           <View style={tw`flex-row justify-between w-4/5 mb-5`}>
-            <TouchableOpacity style={tw`bg-blue-600 p-4 rounded-full w-15 h-15 items-center justify-center`} onPress={() => alert('Upload photos')}>
-              <MaterialIcons name="photo" size={24} color="#fff" />
+            <TouchableOpacity style={tw`bg-blue-600 p-4 rounded-full w-15 h-15 items-center justify-center`} onPress={() =>navigation.navigate('Catalog')}>
+              <MaterialIcons name="library-books" size={24} color="#fff" />
             </TouchableOpacity>
-            <TouchableOpacity style={tw`bg-blue-600 p-4 rounded-full w-15 h-15 items-center justify-center`} onPress={() => alert('View orders')}>
+            <TouchableOpacity style={tw`bg-blue-600 p-4 rounded-full w-15 h-15 items-center justify-center`} onPress={() => navigation.navigate('OrderScreen')}>
               <MaterialIcons name="list-alt" size={24} color="#fff" />
             </TouchableOpacity>
           </View>
-          <TouchableOpacity style={tw`absolute bottom-7 w-15 h-15 rounded-full bg-red-600 items-center justify-center shadow-lg`} onPress={() => setShowAddClientForm(true)}>
+          <TouchableOpacity style={tw`absolute bottom-7 w-15 h-15 rounded-full bg-violet-600 items-center justify-center shadow-lg`} onPress={() => navigation.navigate('AddClientScreen')}>
             <MaterialIcons name="add" size={24} color="#fff" />
           </TouchableOpacity>
         </View>
@@ -127,39 +131,43 @@ const TailorLandingScreen = ({ navigation }) => {
 
       {/* Menu Modal */}
       <Animated.View
-        style={[tw`absolute top-0 bottom-0 left-0 w-75 bg-slate-500  border-gray-00 py-5 px-3 shadow-lg`, { transform: [{ translateX: menuAnim }] }]}
+        style={[tw`absolute top-0 bottom-0 left-0 w-75 bg-blue-500  py-5 px-3 shadow-lg`, { transform: [{ translateX: menuAnim }] }]}
       >
         {menuVisible && (
-          <TouchableOpacity style={tw`absolute top- right-2 p-2`} onPress={handleMenuToggle}>
+          <TouchableOpacity style={tw`absolute top-1 right-2 p-2`} onPress={handleMenuToggle}>
             <MaterialIcons name="close" size={24} color="#333" />
           </TouchableOpacity>
         )}
         {menuVisible && (
-          <TouchableOpacity style={tw`absolute top-0 left-0 right-0 bg-slate-700 bottom-0 bg- `} onPress={handleOverlayPress} />
+          <TouchableOpacity style={tw`absolute top-2 left-0 right-0 bottom-0`} onPress={handleOverlayPress} />
         )}
-        <TouchableOpacity style={tw`flex-row items-center py-2 px-5`} onPress={() => navigation.navigate('Profile')}>
+        <TouchableOpacity style={tw`flex-row items-center mt-10 py-2 px-5`} onPress={() => navigation.navigate('TailorProfile')}>
           <MaterialIcons name="person" size={24} color="white" />
           <Text style={tw`ml-2 text-lg text-white`}>Profile</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={tw`flex-row items-center py-2 px-5`} onPress={() => navigation.navigate('Notifications')}>
+        <TouchableOpacity style={tw`flex-row items-center py-2 px-5`} onPress={() => navigation.navigate('NotificationScreen')}>
           <MaterialIcons name="notifications" size={24} color="white" />
           <Text style={tw`ml-2 text-lg text-white`}>Notifications</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={tw`flex-row items-center py-2 px-5`} onPress={() =>  navigation.navigate('Signup')}>
+        <TouchableOpacity style={tw`flex-row items-center py-2 px-5`} onPress={() => handleDisconnect()}>
           <MaterialIcons name="exit-to-app" size={24} color="white" />
           <Text style={tw`ml-2 text-lg text-white`}>Disconnect</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={tw`flex-row items-center py-2 px-5`} onPress={() => navigation.navigate('ClientList')}>
+        <TouchableOpacity style={tw`flex-row items-center py-2 px-5`} onPress={() => navigation.navigate('ClientDetails')}>
           <MaterialIcons name="list" size={24} color="white" />
           <Text style={tw`ml-2 text-lg text-white`}>Clients</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={tw`flex-row items-center py-2 px-5`} onPress={() => navigation.navigate('Orders')}>
+        <TouchableOpacity style={tw`flex-row items-center py-2 px-5`} onPress={() => navigation.navigate('OrderScreen')}>
           <MaterialIcons name="list" size={24} color="white" />
           <Text style={tw`ml-2 text-lg text-white`}>Orders</Text>
         </TouchableOpacity>
         <TouchableOpacity style={tw`flex-row items-center py-2 px-5`} onPress={() => navigation.navigate('Catalog')}>
           <MaterialIcons name="library-books" size={24} color="white" />
           <Text style={tw`ml-2 text-lg text-white`}>Catalog</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={tw`flex-row items-center py-2 px-5`} onPress={() => navigation.navigate('ChatScreen')}>
+          <MaterialIcons name="library-books" size={24} color="white" />
+          <Text style={tw`ml-2 text-lg text-white`}>Chat</Text>
         </TouchableOpacity>
       </Animated.View>
     </SafeAreaView>

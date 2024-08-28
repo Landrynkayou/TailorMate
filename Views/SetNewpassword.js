@@ -17,27 +17,29 @@ const SetNewPasswordScreen = ({ navigation }) => {
   };
 
   return (
-    <View style={tw`flex-1 justify-center items-center p-5`}>
-      <Text style={tw`text-2xl font-bold mb-5`}>Set New Password</Text>
+    <View style={tw`flex-1 justify-center items-center p-6 bg-gray-100`}>
+      <Text style={tw`text-3xl font-bold mb-8 text-blue-600`}>Set New Password</Text>
       <TextInput
-        style={tw`w-full h-12 border border-gray-300 rounded-md px-3 mb-5`}
+        style={tw`w-full h-14 border border-gray-300 rounded-lg px-4 mb-5 bg-white shadow-lg`}
         placeholder="New Password"
         value={newPassword}
         onChangeText={setNewPassword}
         secureTextEntry
+        placeholderTextColor={tw.color('gray-400')}
       />
       <TextInput
-        style={tw`w-full h-12 border border-gray-300 rounded-md px-3 mb-5`}
+        style={tw`w-full h-14 border border-gray-300 rounded-lg px-4 mb-8 bg-white shadow-lg`}
         placeholder="Confirm New Password"
         value={confirmPassword}
         onChangeText={setConfirmPassword}
         secureTextEntry
+        placeholderTextColor={tw.color('gray-400')}
       />
       <TouchableOpacity
-        style={tw`bg-blue-500 py-3 px-8 rounded-md`}
+        style={tw`bg-blue-600 py-4 px-10 rounded-full shadow-lg`}
         onPress={handleSubmit}
       >
-        <Text style={tw`text-white font-bold text-base`}>Submit</Text>
+        <Text style={tw`text-white font-bold text-lg`}>Submit</Text>
       </TouchableOpacity>
     </View>
   );

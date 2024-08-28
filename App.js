@@ -17,7 +17,12 @@ import ClientDetailsScreen from './Views/Tailor/ClientDetailsScreen';
 import PasswordRecoverySuccessScreen from './Views/SuccessPasword';
 import OTPVerificationScreen from './Views/OtpVerification';
 import SetNewPasswordScreen from './Views/SetNewpassword';
-
+import AddClientScreen from './Views/AddCllientScreen';
+import ProfileScreen from './Views/Tailor/TailorProfile';
+import OrderListScreen from './Views/Tailor/OrderListScreen';
+import NotificationScreen from './Views/Tailor/NotificationScreen';
+import ChatScreen from './Views/Tailor/ChatScreen';
+import ClientLandingScreen from './Views/Client/ClientLandingScreen';
 
 const Stack = createStackNavigator();
 
@@ -67,6 +72,11 @@ export default function App() {
             component={ClientDetailsScreen}
             options={{ title: 'Client Details' }}
           />
+          <Stack.Screen
+            name="AddClientScreen"
+            component={AddClientScreen}
+            options={{ title: 'Add client' }}
+          />
             <Stack.Screen
             name="PasswordRecoverySuccess"
             component={PasswordRecoverySuccessScreen}
@@ -82,6 +92,32 @@ export default function App() {
         component={SetNewPasswordScreen}
         options={{ title: 'Set new password' }}
       />
+       <Stack.Screen
+        name="TailorProfile"
+        component={ProfileScreen}
+        options={{ title: 'Profile' }}
+      />
+      
+      <Stack.Screen
+      name="OrderScreen"
+      component={OrderListScreen}
+      options={{ title: "Orders" }}
+    />
+     <Stack.Screen
+      name="NotificationScreen"
+      component={NotificationScreen}
+      options={{ title: "Notifications" }}
+    />
+    <Stack.Screen
+      name="ChatScreen"
+      component={ChatScreen}
+      options={{ title: "Chat" }}
+    />
+     <Stack.Screen
+      name="ClientLandingScreen"
+      component={ClientLandingScreen}
+      options={{ title: "Client Dashboard" }}
+    />
         </Stack.Navigator>
       </View>
     </NavigationContainer>
