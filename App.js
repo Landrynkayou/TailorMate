@@ -23,6 +23,9 @@ import OrderListScreen from './Views/Tailor/OrderListScreen';
 import NotificationScreen from './Views/Tailor/NotificationScreen';
 import ChatScreen from './Views/Tailor/ChatScreen';
 import ClientLandingScreen from './Views/Client/ClientLandingScreen';
+import ClientProfileScreen from './Views/Client/ProfileScreen';
+import AppointmentScreen from './Views/Client/BookAppointmentScreen';
+import TailorAppointmentScreen from './Views/Tailor/TailorAppointmentScreen';
 
 const Stack = createStackNavigator();
 
@@ -118,6 +121,22 @@ export default function App() {
       component={ClientLandingScreen}
       options={{ title: "Client Dashboard" }}
     />
+     <Stack.Screen
+      name="ClientProfileScreen"
+      component={ClientProfileScreen}
+      options={{ title: "Client profile" }}
+    /> 
+     <Stack.Screen
+    name="AppointmentScreen"
+    component={AppointmentScreen}
+    options={{ title: "Appointment screen" }}
+  />
+   <Stack.Screen
+    name="TailorAppointmentScreen"
+    component={TailorAppointmentScreen}
+    options={{ title: "Appointment screen" }}
+  />
+  
         </Stack.Navigator>
       </View>
     </NavigationContainer>

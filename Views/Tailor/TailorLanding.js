@@ -1,26 +1,24 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, TouchableOpacity, FlatList, Image, SafeAreaView, TextInput, Animated, Easing } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, Image, SafeAreaView, TextInput, Animated, Easing, Alert } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
-import AddClientScreen from '../AddCllientScreen';
-import { Alert } from 'react-native';
 import tw from 'twrnc';
 
 const TailorLandingScreen = ({ navigation }) => {
   const [clients, setClients] = useState([
     { id: '1', name: 'John Doe', avatar: 'https://i.pravatar.cc/150?img=1' },
     { id: '2', name: 'Jane Smith', avatar: 'https://i.pravatar.cc/150?img=2' },
-    // Add more clients with avatar URLs
   ]);
   const [searchText, setSearchText] = useState('');
   const [searchVisible, setSearchVisible] = useState(false);
   const [menuVisible, setMenuVisible] = useState(false);
-  const [menuAnim] = useState(new Animated.Value(-300)); // Start off-screen
-  const [showAddClientForm, setShowAddClientForm] = useState(false); // State to manage form visibility
+  const [menuAnim] = useState(new Animated.Value(-300)); 
+  const [showAddClientForm, setShowAddClientForm] = useState(false); 
   const searchInputRef = useRef(null);
 
   const filteredClients = clients.filter((client) =>
     client.name.toLowerCase().includes(searchText.toLowerCase())
   );
+
   const handleDisconnect = () => {
     Alert.alert(
       "Disconnect",
@@ -32,15 +30,15 @@ const TailorLandingScreen = ({ navigation }) => {
         },
         {
           text: "Yes",
-          onPress: () => navigation.navigate('Login'), // Redirect to login screen
+          onPress: () => navigation.navigate('Login'), 
         }
       ]
     );
   };
+
   const handleSearchToggle = () => {
     setSearchVisible(!searchVisible);
     if (!searchVisible) {
-      // Focus the search input when it becomes visible
       setTimeout(() => {
         searchInputRef.current.focus();
       }, 100);
@@ -50,7 +48,7 @@ const TailorLandingScreen = ({ navigation }) => {
   const handleMenuToggle = () => {
     setMenuVisible(!menuVisible);
     Animated.timing(menuAnim, {
-      toValue: menuVisible ? -300 : 0, // Slide in/out
+      toValue: menuVisible ? -300 : 0,
       duration: 300,
       useNativeDriver: true,
       easing: Easing.ease,
@@ -59,18 +57,18 @@ const TailorLandingScreen = ({ navigation }) => {
 
   const handleOverlayPress = () => {
     if (menuVisible) {
-      handleMenuToggle(); // Close the menu when the overlay is pressed
+      handleMenuToggle();
     }
   };
-  
+
   return (
     <SafeAreaView style={tw`flex-1 bg-gray-100`}>
-      <View style={tw`flex-row items-center bg-blue-600 py-4 px-5`}>
+      <View style={tw`flex-row mb-5 items-center py-4 px-5`}>
         <TouchableOpacity style={tw`p-2`} onPress={handleMenuToggle}>
-          <MaterialIcons name="menu" size={24} color="#fff" />
+          <MaterialIcons name="menu" size={24} color="black" />
         </TouchableOpacity>
         <View style={tw`flex-1 items-center`}>
-          <Text style={tw`text-white text-xl font-bold`}>TailorMate</Text>
+          <Text style={tw`text-black text-xl font-bold`}>TailorMate</Text>
         </View>
         {searchVisible ? (
           <TextInput
@@ -79,23 +77,22 @@ const TailorLandingScreen = ({ navigation }) => {
             placeholder="Search clients"
             value={searchText}
             onChangeText={setSearchText}
-            onBlur={() => setSearchVisible(false)} // Hide search input when focus is lost
+            onBlur={() => setSearchVisible(false)}
           />
         ) : (
           <TouchableOpacity style={tw`p-2`} onPress={handleSearchToggle}>
-            <MaterialIcons name="search" size={24} color="#fff" />
+            <MaterialIcons name="search" size={24} color="black" />
           </TouchableOpacity>
         )}
       </View>
 
-      {!showAddClientForm  && (
+      {!showAddClientForm && (
         <FlatList
           data={filteredClients}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <TouchableOpacity 
               style={tw`flex-row items-center bg-white rounded-lg mx-5 my-2 p-3 shadow-lg`}
-             
             >
               <View style={tw`mr-4`}>
                 <Image source={{ uri: item.avatar }} style={tw`w-12 h-12 rounded-full`} />
@@ -129,9 +126,8 @@ const TailorLandingScreen = ({ navigation }) => {
         </View>
       )}
 
-      {/* Menu Modal */}
       <Animated.View
-        style={[tw`absolute top-0 bottom-0 left-0 w-75 bg-blue-500  py-5 px-3 shadow-lg`, { transform: [{ translateX: menuAnim }] }]}
+        style={[tw`absolute top-0 bottom-0 left-0 w-75 bg-blue-500 py-5 px-3 shadow-lg`, { transform: [{ translateX: menuAnim }] }]}
       >
         {menuVisible && (
           <TouchableOpacity style={tw`absolute top-1 right-2 p-2`} onPress={handleMenuToggle}>
@@ -149,16 +145,16 @@ const TailorLandingScreen = ({ navigation }) => {
           <MaterialIcons name="notifications" size={24} color="white" />
           <Text style={tw`ml-2 text-lg text-white`}>Notifications</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={tw`flex-row items-center py-2 px-5`} onPress={() => handleDisconnect()}>
+        <TouchableOpacity style={tw`flex-row items-center py-2 px-5`} onPress={handleDisconnect}>
           <MaterialIcons name="exit-to-app" size={24} color="white" />
           <Text style={tw`ml-2 text-lg text-white`}>Disconnect</Text>
         </TouchableOpacity>
         <TouchableOpacity style={tw`flex-row items-center py-2 px-5`} onPress={() => navigation.navigate('ClientDetails')}>
-          <MaterialIcons name="list" size={24} color="white" />
+          <MaterialIcons name="people" size={24} color="white" />
           <Text style={tw`ml-2 text-lg text-white`}>Clients</Text>
         </TouchableOpacity>
         <TouchableOpacity style={tw`flex-row items-center py-2 px-5`} onPress={() => navigation.navigate('OrderScreen')}>
-          <MaterialIcons name="list" size={24} color="white" />
+          <MaterialIcons name="assignment" size={24} color="white" />
           <Text style={tw`ml-2 text-lg text-white`}>Orders</Text>
         </TouchableOpacity>
         <TouchableOpacity style={tw`flex-row items-center py-2 px-5`} onPress={() => navigation.navigate('Catalog')}>
@@ -166,8 +162,12 @@ const TailorLandingScreen = ({ navigation }) => {
           <Text style={tw`ml-2 text-lg text-white`}>Catalog</Text>
         </TouchableOpacity>
         <TouchableOpacity style={tw`flex-row items-center py-2 px-5`} onPress={() => navigation.navigate('ChatScreen')}>
-          <MaterialIcons name="library-books" size={24} color="white" />
+          <MaterialIcons name="chat" size={24} color="white" />
           <Text style={tw`ml-2 text-lg text-white`}>Chat</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={tw`flex-row items-center py-2 px-5`} onPress={() => navigation.navigate('TailorAppointmentScreen')}>
+          <MaterialIcons name="calendar-today" size={24} color="white" />
+          <Text style={tw`ml-2 text-lg text-white`}>Appointments</Text>
         </TouchableOpacity>
       </Animated.View>
     </SafeAreaView>

@@ -7,6 +7,7 @@ const { width } = Dimensions.get('window');
 
 const WelcomeScreen = ({ navigation }) => {
   const [animation] = useState(new Animated.Value(0));
+  const [logoScale] = useState(new Animated.Value(0));
   const [currentScreen, setCurrentScreen] = useState(0);
   const [gradientColors, setGradientColors] = useState(['#4a90e2', '#3498db']);
   const flatListRef = React.useRef(null);
@@ -17,11 +18,6 @@ const WelcomeScreen = ({ navigation }) => {
       description: "Order custom-made clothes from the comfort of your home with our easy-to-use app.",
       icon: "tshirt-crew-outline"
     },
-    /*{
-      title: "Perfect Fit, Every Time",
-      description: "Upload your measurements and get perfectly fitting clothes delivered to your door.",
-      icon: "ruler-square-compass"
-    },*/
     {
       title: "Track Your Orders",
       description: "Stay updated with the progress of your orders and receive notifications when they are ready.",
@@ -30,12 +26,20 @@ const WelcomeScreen = ({ navigation }) => {
   ];
 
   useEffect(() => {
+    // Start animation for the screen content
     Animated.timing(animation, {
       toValue: 1,
       duration: 1500,
       useNativeDriver: true,
     }).start();
-  }, [animation]);
+
+    // Start animation for the logo scaling
+    Animated.spring(logoScale, {
+      toValue: 1,
+      friction: 3,
+      useNativeDriver: true,
+    }).start();
+  }, []);
 
   const handleScroll = (event) => {
     const slideIndex = Math.round(event.nativeEvent.contentOffset.x / width);
@@ -69,11 +73,14 @@ const WelcomeScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <LinearGradient
-        colors={gradientColors}
-        style={styles.gradient}
-      >
+      <LinearGradient colors={gradientColors} style={styles.gradient}>
         <Animated.View style={[{ flex: 1 }, { opacity: animation }]}>
+          
+          {/* Animated Logo */}
+          <Animated.View style={[styles.logoContainer, { transform: [{ scale: logoScale }] }]}>
+            <Text style={styles.logo}>TailorMate</Text>
+          </Animated.View>
+
           <FlatList
             ref={flatListRef}
             data={screens}
@@ -170,11 +177,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 20,
     right: 20,
-   
   },
   skipButtonText: {
     color: '#fff',
-    fontSize: 16, 
+    fontSize: 16,
     fontWeight: '800',
   },
   pagination: {
@@ -191,6 +197,16 @@ const styles = StyleSheet.create({
   },
   paginationDotActive: {
     backgroundColor: '#fff',
+  },
+  logoContainer: {
+    position: 'absolute',
+    top: 50, // Adjust based on where you want the logo to appear
+    alignItems: 'center',
+  },
+  logo: {
+    fontSize: 36,
+    fontWeight: 'bold',
+    color: '#fff',
   },
 });
 

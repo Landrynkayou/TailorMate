@@ -1,6 +1,7 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, SafeAreaView, Animated, Easing, ScrollView, StyleSheet } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import tw from 'twrnc';
 
 const ClientLandingScreen = ({ navigation }) => {
@@ -25,16 +26,24 @@ const ClientLandingScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={tw`flex-1 bg-gray-100`}>
-      <View style={tw`flex-row items-center bg-blue-600 py-4 px-5`}>
+      <View style={tw`flex-row items-center  py-4 px-5`}>
         <TouchableOpacity style={tw`p-2`} onPress={handleMenuToggle}>
-          <MaterialIcons name="menu" size={24} color="#fff" />
+          <MaterialIcons name="menu" size={24} color="black" />
         </TouchableOpacity>
         <View style={tw`flex-1 items-center`}>
-          <Text style={tw`text-white text-xl font-bold`}>Client Dashboard</Text>
+          <Text style={tw`text-black text-xl font-bold`}>Client Dashboard</Text>
         </View>
       </View>
 
       <ScrollView contentContainerStyle={styles.container}>
+        <View style={styles.imageContainer}>
+          <LinearGradient
+            colors={['#4a90e2', '#3498db']}
+            style={styles.gradientRectangle}
+          >
+            <Text style={styles.welcomeMessage}>Welcome to TailorMate!</Text>
+          </LinearGradient>
+        </View>
         <View style={styles.grid}>
           <TouchableOpacity 
             style={styles.item} 
@@ -52,7 +61,7 @@ const ClientLandingScreen = ({ navigation }) => {
           </TouchableOpacity>
           <TouchableOpacity 
             style={styles.item} 
-            onPress={() => navigation.navigate('ClientNotificationScreen')}
+            onPress={() => navigation.navigate('NotificationScreen')}
           >
             <MaterialIcons name="notifications" size={50} color="#fff" />
             <Text style={styles.text}>View Notifications</Text>
@@ -83,7 +92,7 @@ const ClientLandingScreen = ({ navigation }) => {
           <MaterialIcons name="person" size={24} color="white" />
           <Text style={tw`ml-2 text-lg text-white`}>Profile</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('ClientNotificationScreen')}>
+        <TouchableOpacity style={styles.menuItem} onPress={() => navigation.navigate('NotificationScreen')}>
           <MaterialIcons name="notifications" size={24} color="white" />
           <Text style={tw`ml-2 text-lg text-white`}>Notifications</Text>
         </TouchableOpacity>
@@ -128,6 +137,26 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     marginTop: 5,
+    textAlign: 'center',
+  },
+  imageContainer: {
+    width: '100%',
+    alignItems: 'center',
+    marginBottom: 120, // Increased distance
+  },
+  gradientRectangle: {
+    width: '90%',
+    height: 200, // Increased height
+    borderRadius: 15, // Slightly rounded corners
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+  },
+  welcomeMessage: {
+    color: '#fff',
+    fontSize: 24, // Increased font size
+    fontWeight: 'bold',
     textAlign: 'center',
   },
   menuModal: {
